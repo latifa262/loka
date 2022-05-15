@@ -2,131 +2,93 @@ package emsi.iir4.loka.web.rest;
 
 import emsi.iir4.loka.domain.Ticket;
 import emsi.iir4.loka.repository.TicketRepository;
-import java.net.URI;
-import java.net.URISyntaxException;
+import emsi.iir4.loka.service.TicketService;
+
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-
-/**
- * REST controller for managing {@link emsi.iir4.loka.domain.Ticket}.
- */
-@RestController
+@Controller
 @RequestMapping("/api")
 @Transactional
 public class TicketResource {
-
 
     private static final String ENTITY_NAME = "ticketTicket";
 
     @Value("ticket")
     private String applicationName;
+    @Autowired
+    private TicketRepository ticketRepository;
+    @Autowired
+    private TicketService ticketService;
 
-    private final TicketRepository ticketRepository;
-
-    public TicketResource(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
-
-    /**
-     * {@code POST  /tickets} : Create a new ticket.
-     *
-     * @param ticket the ticket to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ticket, or with status {@code 400 (Bad Request)} if the ticket has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("/tickets")
-    public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) throws URISyntaxException {
+    public Ticket createTicket(@RequestBody Ticket ticket) {
         if (ticket.getId() != null) {
-            //throw new BadRequestAlertException("A new ticket cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new IllegalArgumentException("invalide id");
         }
-        Ticket result = ticketRepository.save(ticket);
-        return ResponseEntity
-            .created(new URI("/api/tickets/" + result.getId()))
-            .body(result);
+        Ticket result = ticketService.create(ticket);
+        return (result);
     }
 
-    /**
-     * {@code PUT  /tickets/:id} : Updates an existing ticket.
-     *
-     * @param id the id of the ticket to save.
-     * @param ticket the ticket to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ticket,
-     * or with status {@code 400 (Bad Request)} if the ticket is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the ticket couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/tickets/{id}")
-    public ResponseEntity<Ticket> updateTicket(@PathVariable(value = "id", required = false) final Long id, @RequestBody Ticket ticket)
-        throws URISyntaxException {
+    @PutMapping("/tickets")
+    public String updateTicket(@RequestBody Ticket ticket) {
         if (ticket.getId() == null) {
-            //throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw new IllegalArgumentException("invalide id");
         }
-        if (!Objects.equals(id, ticket.getId())) {
-            //throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!ticketRepository.existsById(id)) {
-            //throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
         Ticket result = ticketRepository.save(ticket);
-        return ResponseEntity
-            .ok()
-            .body(result);
+        return "redirect:/tickets";
+
     }
 
-    /**
-     * {@code PATCH  /tickets/:id} : Partial updates given fields of an existing ticket, field will ignore if it is null
-     *
-     * @param id the id of the ticket to save.
-     * @param ticket the ticket to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ticket,
-     * or with status {@code 400 (Bad Request)} if the ticket is not valid,
-     * or with status {@code 404 (Not Found)} if the ticket is not found,
-     * or with status {@code 500 (Internal Server Error)} if the ticket couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-   
-
-    /**
-     * {@code GET  /tickets} : get all the tickets.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tickets in body.
-     */
     @GetMapping("/tickets")
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
+    public String getAllTickets() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        return "redirect:/tickets";
     }
 
-    /**
-     * {@code GET  /tickets/:id} : get the "id" ticket.
-     *
-     * @param id the id of the ticket to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ticket, or with status {@code 404 (Not Found)}.
-     */
     @GetMapping("/tickets/{id}")
-    public Ticket getTicket(@PathVariable Long id) {
+    public String getTicket(@PathVariable Long id) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
-        return ticket.get();
+        return "redirect:/tickets";
     }
 
-    /**
-     * {@code DELETE  /tickets/:id} : delete the "id" ticket.
-     *
-     * @param id the id of the ticket to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/tickets/{id}")
-    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
+    public String deleteTicket(@PathVariable Long id) {
         ticketRepository.deleteById(id);
-        return ResponseEntity
-            .noContent()
-            .build();
+
+        return "redirect:/tickets";
     }
+
+    @PutMapping("/tickets/{id}")
+    public String assign(@PathVariable Long id) {
+        ticketService.assign(id);
+        return "redirect:/tickets";
+    }
+    @GetMapping("dev")
+    @PreAuthorize("hasAuthority('ROLE_DEV')")
+    public String getDev() {
+        List<Ticket> tickets = ticketService.findByDev();
+        return "redirect:/tickets";
+    }
+    @GetMapping("client")
+    @PreAuthorize("hasAuthority('ROLE_CLIENT')")
+    public String getClient() {
+        List<Ticket> tickets = ticketService.findByClient();
+        return "redirect:/tickets";
+    }
+
+    @GetMapping("/tickets/devNull")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String getDevNull() {
+        List<Ticket> tickets = ticketService.findByDevNull();
+        return "redirect:/tickets";
+    }
+
 }
