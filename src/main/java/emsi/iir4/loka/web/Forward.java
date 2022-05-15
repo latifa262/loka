@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import emsi.iir4.loka.domain.User;
 import emsi.iir4.loka.service.UserService;
@@ -26,9 +27,12 @@ public class Forward {
 	}
 	//authenticate user
 	@PostMapping("/authenticate")
-	String authenticate(String userName, String password) {
-		userService.login(userName, password);
-		return "redirect:/";
+
+	ModelAndView authenticate(String userName, String password) {
+	User user = userService.login(userName, password);
+	ModelAndView modelAndView = new ModelAndView("redirect:/index");
+	modelAndView.addObject("user", user);
+		return modelAndView;
 	}
 	
 	

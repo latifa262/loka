@@ -1,4 +1,4 @@
-package emsi.iir4.loka.web.rest;
+package emsi.iir4.loka.web.controller;
 
 import emsi.iir4.loka.domain.User;
 import emsi.iir4.loka.repository.UserRepository;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * REST controller for managing {@link emsi.iir4.loka.domain.User}.
@@ -45,15 +46,19 @@ public class UserWeb {
     }
 
     @GetMapping
-    public String getAllUsers() {
+    public ModelAndView getAllUsers() {
         List<User> users = userRepository.findAll();
-        return "redirect:/index";
+        ModelAndView modelAndView = new ModelAndView("redirect:/index");
+        modelAndView.addObject("users", users);
+        return modelAndView;
     }
 
     @GetMapping("/{id}")
-    public String getUSer(@PathVariable Long id) {
+    public ModelAndView getUSer(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
-        return "redirect:/index";
+        ModelAndView modelAndView = new ModelAndView("redirect:/index");
+        modelAndView.addObject("user", user);
+        return modelAndView;
     }
 
     @DeleteMapping("/{id}")

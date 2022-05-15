@@ -1,4 +1,4 @@
-package emsi.iir4.loka.web.rest;
+package emsi.iir4.loka.web.controller;
 
 import emsi.iir4.loka.domain.Ticket;
 import emsi.iir4.loka.repository.TicketRepository;
@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/api")
@@ -29,12 +30,14 @@ public class TicketResource {
     private TicketService ticketService;
 
     @PostMapping("/tickets")
-    public Ticket createTicket(@RequestBody Ticket ticket) {
+    public ModelAndView createTicket(@RequestBody Ticket ticket) {
         if (ticket.getId() != null) {
             throw new IllegalArgumentException("invalide id");
         }
         Ticket result = ticketService.create(ticket);
-        return (result);
+        ModelAndView modelAndView = new ModelAndView("redirect:/tickets");
+        modelAndView.addObject("ticket", result);
+        return modelAndView;
     }
 
     @PutMapping("/tickets")
@@ -48,15 +51,19 @@ public class TicketResource {
     }
 
     @GetMapping("/tickets")
-    public String getAllTickets() {
+    public ModelAndView getAllTickets() {
         List<Ticket> tickets = ticketRepository.findAll();
-        return "redirect:/tickets";
+        ModelAndView modelAndView = new ModelAndView("redirect:/tickets");
+        modelAndView.addObject("tickets", tickets);
+        return modelAndView;
     }
 
     @GetMapping("/tickets/{id}")
-    public String getTicket(@PathVariable Long id) {
+    public ModelAndView getTicket(@PathVariable Long id) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
-        return "redirect:/tickets";
+        ModelAndView modelAndView = new ModelAndView("redirect:/tickets");
+        modelAndView.addObject("ticket", ticket);
+        return modelAndView;
     }
 
     @DeleteMapping("/tickets/{id}")
@@ -73,22 +80,28 @@ public class TicketResource {
     }
     @GetMapping("dev")
     @PreAuthorize("hasAuthority('ROLE_DEV')")
-    public String getDev() {
+    public ModelAndView getDev() {
         List<Ticket> tickets = ticketService.findByDev();
-        return "redirect:/tickets";
+        ModelAndView modelAndView = new ModelAndView("redirect:/tickets");
+        modelAndView.addObject("tickets", tickets);
+        return modelAndView;
     }
     @GetMapping("client")
     @PreAuthorize("hasAuthority('ROLE_CLIENT')")
-    public String getClient() {
+    public ModelAndView getClient() {
         List<Ticket> tickets = ticketService.findByClient();
-        return "redirect:/tickets";
+        ModelAndView modelAndView = new ModelAndView("redirect:/tickets");
+        modelAndView.addObject("tickets", tickets);
+        return modelAndView;
     }
 
     @GetMapping("/tickets/devNull")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String getDevNull() {
+    public ModelAndView getDevNull() {
         List<Ticket> tickets = ticketService.findByDevNull();
-        return "redirect:/tickets";
+        ModelAndView modelAndView = new ModelAndView("redirect:/tickets");
+        modelAndView.addObject("tickets", tickets);
+        return modelAndView;
     }
 
 }
