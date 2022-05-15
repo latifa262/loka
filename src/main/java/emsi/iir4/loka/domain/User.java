@@ -25,10 +25,10 @@ public class User implements Serializable {
 
     private String Authority;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany
+    @JoinColumn(name = "id")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Ticket> tickets = new HashSet<>();
-
 
     public Long getId() {
         return this.id;
@@ -50,7 +50,6 @@ public class User implements Serializable {
     public String getPassword() {
         return this.password;
     }
-
 
     public User username(String userName) {
         this.setUserName(userName);

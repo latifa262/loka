@@ -51,8 +51,8 @@ public class UserWeb {
     }
 
     @GetMapping("/{id}")
-    public String getAdmin(@PathVariable Long id) {
-        Optional<User> admin = userRepository.findById(id);
+    public String getUSer(@PathVariable Long id) {
+        Optional<User> user = userRepository.findById(id);
         return "redirect:/index";
     }
 

@@ -2,6 +2,7 @@ package emsi.iir4.loka.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -9,7 +10,7 @@ import emsi.iir4.loka.config.CustomAuthenticationProvider;
 import emsi.iir4.loka.config.SecurityUtils;
 import emsi.iir4.loka.domain.User;
 import emsi.iir4.loka.repository.UserRepository;
-
+@Service
 public class UserService {
 
     @Autowired

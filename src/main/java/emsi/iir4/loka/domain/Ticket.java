@@ -32,13 +32,17 @@ public class Ticket implements Serializable {
 
     private String logiciel;
 
+
     @ManyToOne
+    @JoinColumn(name = "admin_id")
     @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
     private User admin;
     @ManyToOne
+    @JoinColumn(name = "dev_id")
     @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
     private User dev;
     @ManyToOne
+    @JoinColumn(name = "client_id")
     @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
     private User client;
 
