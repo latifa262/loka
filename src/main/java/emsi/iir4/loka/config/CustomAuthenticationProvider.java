@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         User user = userRepository.findUserByUserName(username).get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getAuthority())); // description is a string
+        authorities.add(new SimpleGrantedAuthority(user.getAuthority().toString())); // description is a string
 
         return new UsernamePasswordAuthenticationToken(username, password, authorities);
     }

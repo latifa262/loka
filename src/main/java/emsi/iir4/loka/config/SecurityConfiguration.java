@@ -59,7 +59,7 @@ public class SecurityConfiguration {
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/client").hasAuthority(AuthoritiesConstants.CLIENT)
             .antMatchers("/api/dev").hasAuthority(AuthoritiesConstants.DEV)
-            .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/admin").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()
         .and()
         .formLogin(form -> form

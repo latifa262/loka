@@ -1,6 +1,9 @@
 package emsi.iir4.loka.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import emsi.iir4.loka.domain.enumeration.Authorities;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +26,8 @@ public class User implements Serializable {
 
     private String password;
 
-    private String Authority;
+    @Enumerated(EnumType.STRING)
+    private Authorities Authority;
 
     @OneToMany
     @JoinColumn(name = "id")
@@ -93,16 +97,16 @@ public class User implements Serializable {
         return this;
     }
 
-    public String getAuthority() {
+    public Authorities getAuthority() {
         return this.Authority;
     }
 
-    public User authority(String authority) {
+    public User authority(Authorities authority) {
         this.setAuthority(authority);
         return this;
     }
 
-    public void setAuthority(String authority) {
+    public void setAuthority(Authorities authority) {
         this.Authority = authority;
     }
 

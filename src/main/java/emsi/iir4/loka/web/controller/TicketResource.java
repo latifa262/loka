@@ -95,7 +95,7 @@ public class TicketResource {
         return modelAndView;
     }
 
-    @GetMapping("/tickets/devNull")
+    @GetMapping("admin")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ModelAndView getDevNull() {
         List<Ticket> tickets = ticketService.findByDevNull();
