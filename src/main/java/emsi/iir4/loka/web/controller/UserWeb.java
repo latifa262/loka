@@ -62,7 +62,7 @@ public class UserWeb {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteAdmin(@PathVariable Long id) {
+    public String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
         return "redirect:/index";
     }

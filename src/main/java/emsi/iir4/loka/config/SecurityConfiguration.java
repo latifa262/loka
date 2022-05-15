@@ -60,6 +60,7 @@ public class SecurityConfiguration {
             .antMatchers("/api/client").hasAuthority(AuthoritiesConstants.CLIENT)
             .antMatchers("/api/dev").hasAuthority(AuthoritiesConstants.DEV)
             .antMatchers("/api/admin").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/users/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()
         .and()
         .formLogin(form -> form
