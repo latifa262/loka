@@ -48,6 +48,11 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.4</version>
 		</dependency>
+		<!-- thymeleaf 3.0-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
