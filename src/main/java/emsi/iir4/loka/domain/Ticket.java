@@ -17,38 +17,34 @@ public class Ticket implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "urgence")
     private Urgence urgence;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "cloture")
     private Cloture cloture;
 
     @Lob
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "env_ex")
     private String envEx;
 
-    @Column(name = "logiciel")
     private String logiciel;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
-    private Client client;
 
     @ManyToOne
+    @JoinColumn(name = "admin_id")
     @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
-    private Developpeur developpeur;
-
+    private User admin;
     @ManyToOne
+    @JoinColumn(name = "dev_id")
     @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
-    private Admin admin;
+    private User dev;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
+    private User client;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -130,46 +126,45 @@ public class Ticket implements Serializable {
         this.logiciel = logiciel;
     }
 
-    public Client getClient() {
-        return this.client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Ticket client(Client client) {
-        this.setClient(client);
-        return this;
-    }
-
-    public Developpeur getDeveloppeur() {
-        return this.developpeur;
-    }
-
-    public void setDeveloppeur(Developpeur developpeur) {
-        this.developpeur = developpeur;
-    }
-
-    public Ticket developpeur(Developpeur developpeur) {
-        this.setDeveloppeur(developpeur);
-        return this;
-    }
-
-    public Admin getAdmin() {
+    public User getAdmin() {
         return this.admin;
     }
 
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
-
-    public Ticket admin(Admin admin) {
-        this.setAdmin(admin);
+    public Ticket admin(User user) {
+        this.setAdmin(user);
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public void setAdmin(User user) {
+        this.admin = user;
+    }
+
+    public User getDev() {
+        return this.dev;
+    }
+
+    public Ticket dev(User user) {
+        this.setDev(user);
+        return this;
+    }
+
+    public void setDev(User user) {
+        this.dev = user;
+    }
+
+    public User getClient() {
+        return this.client;
+    }
+
+    public Ticket client(User user) {
+        this.setClient(user);
+        return this;
+    }
+
+    public void setClient(User user) {
+        this.client = user;
+    }
+    
 
     @Override
     public boolean equals(Object o) {
@@ -184,7 +179,6 @@ public class Ticket implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -192,12 +186,12 @@ public class Ticket implements Serializable {
     @Override
     public String toString() {
         return "Ticket{" +
-            "id=" + getId() +
-            ", urgence='" + getUrgence() + "'" +
-            ", cloture='" + getCloture() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", envEx='" + getEnvEx() + "'" +
-            ", logiciel='" + getLogiciel() + "'" +
-            "}";
+                "id=" + getId() +
+                ", urgence='" + getUrgence() + "'" +
+                ", cloture='" + getCloture() + "'" +
+                ", description='" + getDescription() + "'" +
+                ", envEx='" + getEnvEx() + "'" +
+                ", logiciel='" + getLogiciel() + "'" +
+                "}";
     }
 }
