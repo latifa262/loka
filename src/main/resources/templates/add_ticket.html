@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Ajout d'un Ticket</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
+</head>
+
+
+
+<body>
+    <div class="container my-5">
+        <h3> Add Ticket</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-10">
+                    <form th:action="@{/tickets/add}" th:object="${ticket}" method="post">
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <label for="id" class="col-form-label">ID</label> 
+                                <input type="text" th:field="*{id}" class="form-control" id="id" placeholder="id"> 
+                            </div>
+                             <div class="form-group col-md-8">
+                                <label for="nom" class="col-form-label">Nom de client</label> 
+                                <input type="text" th:field="*{id}" class="form-control" id="id" placeholder="id"> 
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label for="description" class="col-form-label">Description</label> 
+                                <input type="text" th:field="*{description}" class="form-control" id="description" placeholder="description"> 
+                            </div>
+							<div class="form-group col-md-8">
+                                <label for="logiciel" class="col-form-label">Logiciel</label> 
+                                <input type="text" th:field="*{logiciel}" class="form-control" id="logiciel" placeholder="logiciel"> 
+                            </div>
+
+							<div class="form-group col-md-8">
+                                <label for="urgence" class="col-form-label">Urgence</label> 
+							<select name="color">
+							    <option th:each="urgenceOpt : ${T(emsi.iir4.loka.domain.enumeration.Urgence).values()}" 
+							        th:value="${urgenceOpt}" th:text="${urgenceOpt}" class="form-control"></option>
+							</select>                            
+							</div>
+                            <div class="form-group col-md-8">
+                                <label for="env_ex" class="col-form-label">Env d'ex</label> 
+                                <input type="text" th:field="*{env_ex}" class="form-control" id="env_ex" placeholder="environnement d’exécution"> 
+                            </div>
+                     
+
+                            <div class="col-md-6">
+                                <input type="submit" class="btn btn-primary" value="Enregistrer">
+                            </div>
+
+                            <div class="form-group col-md-8"></div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
