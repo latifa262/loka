@@ -20,7 +20,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="col-md-10">
-                    <form th:action="@{/tickets/add}" th:object="${ticket}" method="post">
+                    <form th:action="@{/api/tickets}" th:object="${ticket}" method="post">
                         <div class="row">
                             <div class="form-group col-md-8">
                                 <label for="id" class="col-form-label">ID</label> 
@@ -48,7 +48,7 @@
 							</div>
                             <div class="form-group col-md-8">
                                 <label for="env_ex" class="col-form-label">Env d'ex</label> 
-                                <input type="text" th:field="*{env_ex}" class="form-control" id="env_ex" placeholder="environnement d’exécution"> 
+                                <input type="text" th:field="*{envEx}" class="form-control" id="env_ex" placeholder="environnement d’exécution"> 
                             </div>
                      
 

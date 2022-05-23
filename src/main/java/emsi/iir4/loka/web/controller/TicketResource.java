@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -35,18 +36,19 @@ public class TicketResource {
             throw new IllegalArgumentException("invalide id");
         }
         Ticket result = ticketService.create(ticket);
-        ModelAndView modelAndView = new ModelAndView("redirect:/tickets");
+        ModelAndView modelAndView = new ModelAndView("redirect:/liste_ticket_client");
         modelAndView.addObject("ticket", result);
         return modelAndView;
     }
 
-    @PutMapping("/tickets")
+    @PostMapping("/tickets/edit")
     public String updateTicket(@RequestBody Ticket ticket) {
         if (ticket.getId() == null) {
             throw new IllegalArgumentException("invalide id");
         }
         Ticket result = ticketRepository.save(ticket);
-        return "redirect:/tickets";
+        String authority = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().toLowerCase().substring("ROLE_".length());
+        return "redirect:/liste_ticket_"+authority;
 
     }
 

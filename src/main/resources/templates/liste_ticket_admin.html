@@ -12,8 +12,8 @@
 </head>
 
 
-<body>
-    <div class="container my-2">
+<body >
+    <div sec:authorize="hasAuthority('ROLE_ADMIN')"  class="container my-2">
         <div class="card">
             <div class="card-body">
                 <div class="container my-5">

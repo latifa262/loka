@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import emsi.iir4.loka.service.UserService;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration {
@@ -33,7 +35,7 @@ public class SecurityConfiguration {
     }
 
     @Autowired
-    private CustomAuthenticationProvider authenticationProvider;
+    private UserService authenticationProvider;
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
@@ -61,7 +63,10 @@ public class SecurityConfiguration {
             .antMatchers("/api/dev").hasAuthority(AuthoritiesConstants.DEV)
             .antMatchers("/api/admin").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/users/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/tickets/add").hasAuthority(AuthoritiesConstants.CLIENT)
+            .antMatchers("/attribuer").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()
+
         .and()
         .formLogin(form -> form
         .loginPage("/login").permitAll())

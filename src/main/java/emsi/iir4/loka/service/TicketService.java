@@ -69,4 +69,8 @@ public class TicketService {
     public List<Ticket> findByDevNull() {
         return ticketRepository.findByDevNull();
     }
+    //findbyid
+    public Ticket findById(Long id) {
+        return ticketRepository.findById(id).get();
+    }
 }
