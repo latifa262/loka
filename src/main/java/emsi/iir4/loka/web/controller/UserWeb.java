@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,8 @@ public class UserWeb {
     private String applicationName;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PutMapping("/{id}")
     public String update(@PathVariable final Long id, @RequestBody User user) {
@@ -65,5 +68,16 @@ public class UserWeb {
     public String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
         return "redirect:/index";
+    }
+    //register
+    @PostMapping("/register")
+    public ModelAndView register(@ModelAttribute("user") User user) {
+        if (user.getId() != null) {
+            throw new IllegalArgumentException("invalide id");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+         userRepository.save(user);
+        ModelAndView modelAndView = new ModelAndView("redirect:/login");
+        return modelAndView;
     }
 }

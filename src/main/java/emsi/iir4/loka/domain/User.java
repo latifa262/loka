@@ -22,7 +22,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
-    private String userName;
+    public String userName;
 
     private String password;
 
@@ -133,7 +133,7 @@ public class User implements Serializable {
     public String toString() {
         return "User{" +
                 "id=" + getId() +
-                ", username='" + getUsername() + "'" +
+                ", userName='" + getUsername() + "'" +
                 "}";
     }
 }

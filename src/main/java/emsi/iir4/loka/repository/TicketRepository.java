@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByDevUserNameContaining(String devUserName);
     List<Ticket> findByClientUserNameContaining(String clientUserName);
-    List<Ticket> findByDevNull();
+    List<Ticket> findByDevIdIsNull();
     List<Ticket> findByClient(User currentUser);
     List<Ticket> findByDev(User currentUser);
     

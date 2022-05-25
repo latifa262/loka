@@ -31,7 +31,7 @@ public class UserService  implements AuthenticationProvider {
     }
 
     public User login(String userName, String password) {
-        User user = userRepository.findUserByUserName(userName).get();
+        User user = userRepository.findByUserName(userName).get();
         if (user == null) {
             throw new IllegalArgumentException("Invalid username or password");
         }
@@ -43,7 +43,11 @@ public class UserService  implements AuthenticationProvider {
     }
 
     public User currentUser() {
-        return userRepository.findUserByUserName(SecurityUtils.getCurrentUserLogin().get()).get();
+        System.out.println("==============================================================================================");
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getCredentials());
+        System.out.println("==============================================================================================");
+
+        return userRepository.findByUserName(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString()).get();
     }
 
 
@@ -53,20 +57,23 @@ public class UserService  implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = userRepository.findUserByUserName(username).get();
+        User user = userRepository.findByUserName(username).get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getAuthority().toString())); 
         System.out.println(authorities.get(0));
         // store user in security context*
-        SecurityContextHolder.  getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, password, authorities));
-
-
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, password, authorities));
         return new UsernamePasswordAuthenticationToken(username, password, authorities);
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
+    //findByUserName(username).get();
+
+    public User findByUserName(String username) {
+        return userRepository.findByUserName(username).get();
     }
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>Register</title>
+</head>
+
+<body>
+    <h1>Register</h1>
+    <form action="/api/users/register" method="post">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="userName" placeholder="username">
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="password">
+        </div>
+        <div>
+            <label for="email">role</label>
+            <!-- option input with roles inside it -->
+            <select name="Authority" id="role">
+                <option value="ROLE_CLIENT">client</option>
+                <option value="ROLE_ADMIN">admin</option>
+                <option value="ROLE_DEV">developpeur</option>
+        </div>
+        <div>
+            <input type="submit" value="Register">
+        </div>
+    </form>
+
+</body>
+
+</html>
